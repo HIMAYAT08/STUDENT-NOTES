@@ -1,0 +1,178 @@
+
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+/* Body */
+body {
+  background-color: #f9f9f9;
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* Header */
+header {
+  background: #6c63ff;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+header h1 {
+  font-size: 2rem;
+}
+
+nav button {
+  background: #ffb703;
+  border: none;
+  padding: 8px 15px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+nav button:hover {
+  background: #fb8500;
+  color: white;
+}
+
+/* Auth Sections */
+.auth-section {
+  background: #fff;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.auth-section h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.auth-section form input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.auth-section form button {
+  width: 100%;
+  padding: 10px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.auth-section form button:hover {
+  background: #5a54d1;
+}
+
+/* Dashboard */
+#dashboard {
+  background: #fff;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 10px;
+  max-width: 700px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.note-form, .search-section, .notes-list, #paymentSection {
+  margin-bottom: 20px;
+}
+
+.note-form input, .search-section input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.note-form button {
+  background: #06d6a0;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.note-form button:hover {
+  background: #04b383;
+}
+
+/* Notes List */
+.notes-list ul {
+  list-style: none;
+}
+
+.notes-list li {
+  background: #edf6f9;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+}
+
+.notes-list li a {
+  text-decoration: none;
+  color: #0077b6;
+  font-weight: bold;
+}
+
+.notes-list li a:hover {
+  color: #023e8a;
+}
+
+/* Payment Section */
+#paymentSection {
+  background: #ffe5ec;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.qr-code {
+  width: 200px;
+  margin: 10px auto;
+  display: block;
+}
+
+#simulatePaymentBtn {
+  background: #ff006e;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#simulatePaymentBtn:hover {
+  background: #d90429;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #555;
+}

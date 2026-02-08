@@ -1,0 +1,101 @@
+MADE BY HIMAYAT
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Child Notes Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Link to CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="authWarning" style="background-color: #ffeb3b; color: #333; padding: 5px; text-align: center; font-size: 12px; font-weight: bold;">⚠️ First signup and then login</div>
+  <!-- Header -->
+  <header>
+    <h1>📚 Student-Notes Storage</h1>
+    <nav>
+      <button id="loginBtn">Login</button>
+      <button id="signupBtn">Signup</button>
+      <button id="logoutBtn" style="display:none;">Logout</button>
+    </nav>
+  </header>
+
+  <!-- Login Form -->
+  <section id="loginSection" class="auth-section">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="loginUsername" placeholder="Username" required>
+      <div style="position: relative;">
+        <input type="password" id="loginPassword" placeholder="Password" required style="padding-right: 35px;">
+        <span id="toggleLoginPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px;">👁️</span>
+      </div>
+      <button type="submit">Login</button>
+      <p id="loginError" style="color: red; display: none; margin-top: 10px; text-align: center; font-weight: bold;">⚠️ Invalid username or password</p>
+    </form>
+  </section>
+
+  <!-- Signup Form -->
+  <section id="signupSection" class="auth-section">
+    <h2>Signup</h2>
+    <form id="signupForm">
+      <input type="text" id="signupUsername" placeholder="Choose Username" required>
+      <div style="position: relative;">
+        <input type="password" id="signupPassword" placeholder="Choose Password" required style="padding-right: 35px;">
+        <span id="toggleSignupPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px;">👁️</span>
+      </div>
+      <button type="submit">Signup</button>
+      <p id="signupError" style="color: red; display: none; margin-top: 10px; text-align: center; font-weight: bold;">⚠️ Password must be at least 8 characters</p>
+    </form>
+  </section>
+
+  <!-- Dashboard -->
+  <section id="dashboard" style="display:none;">
+    <h2>My Dashboard</h2>
+    <div class="stats">
+      <p>Total Pages Used: <span id="pagesUsed">0</span></p>
+      <p>Remaining Pages: <span id="pagesRemaining">20</span></p>
+    </div>
+
+    <!-- Notes Form -->
+    <div class="note-form">
+      <h3>Add a New Note</h3>
+      <form id="noteForm">
+        <input type="text" id="noteName" placeholder="Note Name" required>
+        <input type="url" id="noteLink" placeholder="Note Link (URL)" required>
+        <button type="submit">Save Note</button>
+      </form>
+    </div>
+
+    <!-- Search Notes -->
+    <div class="search-section">
+      <input type="text" id="searchInput" placeholder="Search notes by name...">
+    </div>
+
+    <!-- Notes List -->
+    <div class="notes-list">
+      <h3>MY NOTES</h3>
+      <ul id="notesContainer"></ul>
+    </div>
+
+    <!-- Payment Section -->
+    <div id="paymentSection" style="display:none;">
+      <h3>Unlock More Pages</h3>
+      <p>You have used all 20 free pages. Please pay ₹10 to unlock 100 more pages.</p>
+      <div class="upi-payment">
+        <p>Scan this UPI QR to pay:</p>
+        <img src="upi-qr-demo.png" alt="UPI QR Code" class="qr-code">
+        <button id="simulatePaymentBtn">I Have Paid</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Made for children to learn and save notes safely ✨</p>
+    <p>Made by Himayat</p>
+  </footer>
+
+  <!-- Link to JS -->
+  <script src="script.js"></script>
+</body>
+</html>

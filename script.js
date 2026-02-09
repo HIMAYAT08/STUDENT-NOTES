@@ -22,6 +22,11 @@ function setupPasswordToggle(toggleId, inputId) {
 setupPasswordToggle("toggleLoginPassword", "loginPassword");
 setupPasswordToggle("toggleSignupPassword", "signupPassword");
 
+// Handle Header Buttons
+document.getElementById("loginBtn").addEventListener("click", () => showSection("loginSection"));
+document.getElementById("signupBtn").addEventListener("click", () => showSection("signupSection"));
+showSection("loginSection"); // Show login initially
+
 // Login
 document.getElementById("loginForm").addEventListener("submit", function(e) {
   e.preventDefault();

@@ -90,7 +90,7 @@ document.getElementById("noteForm").addEventListener("submit", function(e) {
 
   const user = users[currentUser];
   if (user.pagesRemaining <= 0) {
-    alert("You have used all free pages. Please pay to unlock more.");
+    alert("Your pages are finished, so please make a payment.");
     document.getElementById("paymentSection").style.display = "block";
     return;
   }
@@ -131,10 +131,13 @@ function updateDashboard() {
   document.getElementById("pagesUsed").textContent = user.pagesUsed;
   document.getElementById("pagesRemaining").textContent = user.pagesRemaining;
 
+  const noteBtn = document.querySelector("#noteForm button");
   if (user.pagesRemaining <= 0) {
     document.getElementById("paymentSection").style.display = "block";
+    if (noteBtn) noteBtn.disabled = true;
   } else {
     document.getElementById("paymentSection").style.display = "none";
+    if (noteBtn) noteBtn.disabled = false;
   }
 }
 
@@ -158,29 +161,34 @@ document.getElementById("searchInput").addEventListener("input", function() {
     });
 });
 
-// Payment Simulation
+// Payment Verification Logic
 document.getElementById("simulatePaymentBtn").addEventListener("click", function() {
   const btn = this;
   let timeLeft = 30;
-  btn.textContent = `Please wait ${timeLeft} seconds...`;
   btn.disabled = true;
+  btn.textContent = `Verifying... ${timeLeft}s`;
 
-  const timer = setInterval(function() {
+  const timer = setInterval(() => {
     timeLeft--;
-    btn.textContent = `Please wait ${timeLeft} seconds...`;
-
+    btn.textContent = `Verifying... ${timeLeft}s`;
+    
     if (timeLeft <= 0) {
       clearInterval(timer);
       const user = users[currentUser];
-      user.pagesRemaining = 50;
-      localStorage.setItem("users", JSON.stringify(users)); // Save to LocalStorage
+      user.pagesRemaining += 50;
+      localStorage.setItem("users", JSON.stringify(users));
       
-      // Update counters
-      document.getElementById("pagesRemaining").textContent = user.pagesRemaining;
-
-      // Show success message in the payment box
-      const paymentSection = document.getElementById("paymentSection");
-      paymentSection.innerHTML = '<h3 style="color: green; text-align: center;">Congratulations! You have successfully received 50 pages.</h3>';
+      alert("Payment successful! 50 pages unlocked.");
+      
+      btn.style.display = "none"; // Hide button again
+      btn.textContent = "I Have Paid";
+      btn.disabled = false;
+      updateDashboard();
     }
   }, 1000);
 });
+
+function payNow() {
+  window.open("https://imjo.in/Du8A5r", "_blank");
+  document.getElementById("simulatePaymentBtn").style.display = "block";
+} 

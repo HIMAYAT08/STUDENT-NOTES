@@ -189,6 +189,6 @@ document.getElementById("simulatePaymentBtn").addEventListener("click", function
 });
 
 function payNow() {
-  window.open("https://imjo.in/Du8A5r", "_blank");
+  window.open("https://imjo.in/pGsBYU", "_blank");
   document.getElementById("simulatePaymentBtn").style.display = "block";
 } 

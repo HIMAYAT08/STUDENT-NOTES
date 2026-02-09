@@ -167,7 +167,7 @@ document.getElementById("simulatePaymentBtn").addEventListener("click", function
     if (timeLeft <= 0) {
       clearInterval(timer);
       const user = users[currentUser];
-      user.pagesRemaining = 100;
+      user.pagesRemaining = 50;
       localStorage.setItem("users", JSON.stringify(users)); // Save to LocalStorage
       
       // Update counters
@@ -175,7 +175,7 @@ document.getElementById("simulatePaymentBtn").addEventListener("click", function
 
       // Show success message in the payment box
       const paymentSection = document.getElementById("paymentSection");
-      paymentSection.innerHTML = '<h3 style="color: green; text-align: center;">Congratulations! You have successfully received 100 pages.</h3>';
+      paymentSection.innerHTML = '<h3 style="color: green; text-align: center;">Congratulations! You have successfully received 50 pages.</h3>';
     }
   }, 1000);
 });

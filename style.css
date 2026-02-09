@@ -13,6 +13,9 @@ body {
   color: #333;
   line-height: 1.6;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Header */
@@ -173,6 +176,6 @@ nav button:hover {
 /* Footer */
 footer {
   text-align: center;
-  margin-top: 20px;
+  margin-top: auto;
   color: #555;
 }

@@ -50,8 +50,8 @@
   <!-- Dashboard -->
   <section id="dashboard" style="display:none;">
     <h2>My Dashboard</h2>
-    <p id="pageLimitWarning" style="color: red; font-weight: bold; display: none; text-align: center; margin-bottom: 10px;">⚠️ Warning: Your pages are finished!</p>
-    <p id="paymentSuccessMsg" style="color: green; font-weight: bold; display: none; text-align: center; margin-bottom: 10px;">Congratulations! Payment successful! 50 pages unlocked.</p>
+    <p id="pagesFinishedWarning" style="color: red; font-weight: bold; display: none; text-align: center; margin-bottom: 5px;">⚠️ Warning: Your pages are finished!</p>
+    <p id="pageLimitWarning" style="color: red; font-weight: bold; display: none; text-align: center; margin-bottom: 10px;">SCROLL DOWN FOR MORE PAGES</p>
     <div class="stats">
       <p>Total Pages Used: <span id="pagesUsed">0</span></p>
       <p>Remaining Pages: <span id="pagesRemaining">20</span></p>
@@ -81,7 +81,7 @@
     <!-- Payment Section -->
     <div id="paymentSection" style="display:none;">
       <h3>Unlock More Pages</h3>
-      <p>You have used all 20 free pages. Please pay ₹10 to unlock 50 more pages.</p>
+      <p>YOU HAVE USED YOUR ALL PAGES PLEASE PAY ₹10 TO UNLOCK 50 MORE PAGES.</p>
       <div class="upi-payment">
         <p style="font-weight: bold;">PAY HEAR TO UNLOCK PAGES <br> ⬇️</p>
         <button onclick="payNow()">
@@ -90,6 +90,7 @@
         <button id="simulatePaymentBtn" style="display:none; width: 100%; margin-top: 10px;">I Have Paid</button>
       </div>
     </div>
+    <p id="paymentSuccessMsg" style="color: green; font-weight: bold; display: none; text-align: center; margin-top: 10px;">Congratulations! Payment successful! You have received 50 pages.</p>
   </section>
 
   <!-- Footer -->

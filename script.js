@@ -135,10 +135,12 @@ function updateDashboard() {
   if (user.pagesRemaining <= 0) {
     document.getElementById("paymentSection").style.display = "block";
     document.getElementById("pageLimitWarning").style.display = "block";
+    document.getElementById("pagesFinishedWarning").style.display = "block";
     if (noteBtn) noteBtn.disabled = true;
   } else {
     document.getElementById("paymentSection").style.display = "none";
     document.getElementById("pageLimitWarning").style.display = "none";
+    document.getElementById("pagesFinishedWarning").style.display = "none";
     if (noteBtn) noteBtn.disabled = false;
   }
 }
@@ -181,6 +183,9 @@ document.getElementById("simulatePaymentBtn").addEventListener("click", function
       localStorage.setItem("users", JSON.stringify(users));
       
       document.getElementById("paymentSuccessMsg").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("paymentSuccessMsg").style.display = "none";
+      }, 5000);
       
       btn.style.display = "none"; // Hide button again
       btn.textContent = "I Have Paid";
@@ -192,5 +197,7 @@ document.getElementById("simulatePaymentBtn").addEventListener("click", function
 
 function payNow() {
   window.open("https://imjo.in/pGsBYU", "_blank");
-  document.getElementById("simulatePaymentBtn").style.display = "block";
-} 
+  setTimeout(() => {
+    document.getElementById("simulatePaymentBtn").style.display = "block";
+  }, 5000);
+}

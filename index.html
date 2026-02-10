@@ -50,6 +50,7 @@
   <!-- Dashboard -->
   <section id="dashboard" style="display:none;">
     <h2>My Dashboard</h2>
+    <p id="pageLimitWarning" style="color: red; font-weight: bold; display: none; text-align: center; margin-bottom: 10px;">⚠️ Warning: Your pages are finished!</p>
     <div class="stats">
       <p>Total Pages Used: <span id="pagesUsed">0</span></p>
       <p>Remaining Pages: <span id="pagesRemaining">20</span></p>
@@ -81,10 +82,9 @@
       <h3>Unlock More Pages</h3>
       <p>You have used all 20 free pages. Please pay ₹10 to unlock 50 more pages.</p>
       <div class="upi-payment">
-        <p>Scan QR or Pay to UPI: <strong>6005341839@fam</strong></p>
-        <img src="upi-qr-demo.png" alt="UPI QR Code" class="qr-code">
+        <p style="font-weight: bold;">PAY HEAR TO UNLOCK PAGES <br> ⬇️</p>
         <button onclick="payNow()">
-          Pay ₹10 to Unlock Pages
+          PAY ₹10 HEAR
         </button>
         <button id="simulatePaymentBtn" style="display:none; width: 100%; margin-top: 10px;">I Have Paid</button>
       </div>

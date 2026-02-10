@@ -134,9 +134,11 @@ function updateDashboard() {
   const noteBtn = document.querySelector("#noteForm button");
   if (user.pagesRemaining <= 0) {
     document.getElementById("paymentSection").style.display = "block";
+    document.getElementById("pageLimitWarning").style.display = "block";
     if (noteBtn) noteBtn.disabled = true;
   } else {
     document.getElementById("paymentSection").style.display = "none";
+    document.getElementById("pageLimitWarning").style.display = "none";
     if (noteBtn) noteBtn.disabled = false;
   }
 }

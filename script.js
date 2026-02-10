@@ -180,7 +180,7 @@ document.getElementById("simulatePaymentBtn").addEventListener("click", function
       user.pagesRemaining += 50;
       localStorage.setItem("users", JSON.stringify(users));
       
-      alert("Payment successful! 50 pages unlocked.");
+      document.getElementById("paymentSuccessMsg").style.display = "block";
       
       btn.style.display = "none"; // Hide button again
       btn.textContent = "I Have Paid";

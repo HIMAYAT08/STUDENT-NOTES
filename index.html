@@ -142,7 +142,7 @@
           <div class="sub-price">₹50</div>
           <div class="sub-duration">5 Days</div>
           <div class="sub-benefit">Unlimited Papers</div>
-          <button class="select-plan-btn" onclick="window.open('https://imjo.in/fSqGSQ', '_blank')">Select Plan</button>
+          <button class="select-plan-btn" onclick="openPlanDetails('Starter', '₹50', '5 Days', 'Unlimited Papers', 'https://imjo.in/fSqGSQ')">Select Plan</button>
         </div>
         <!-- Plan 2 -->
         <div class="sub-card popular">
@@ -150,7 +150,7 @@
           <div class="sub-price">₹100</div>
           <div class="sub-duration">10 Days</div>
           <div class="sub-benefit">Unlimited Access</div>
-          <button class="select-plan-btn" onclick="window.open('https://imjo.in/d9CGVh', '_blank')">Select Plan</button>
+          <button class="select-plan-btn" onclick="openPlanDetails('Standard', '₹100', '10 Days', 'Unlimited Access', 'https://imjo.in/d9CGVh')">Select Plan</button>
         </div>
         <!-- Plan 3 -->
         <div class="sub-card">
@@ -158,9 +158,33 @@
           <div class="sub-price">₹399</div>
           <div class="sub-duration">30 Days</div>
           <div class="sub-benefit">Unlimited Access</div>
-          <button class="select-plan-btn" onclick="window.open('https://imjo.in/kwXpJb', '_blank')">Select Plan</button>
+          <button class="select-plan-btn" onclick="openPlanDetails('Premium', '₹399', '30 Days', 'Unlimited Access', 'https://imjo.in/kwXpJb')">Select Plan</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Selected Plan Details Overlay -->
+  <div id="selectedPlanOverlay" class="subscription-overlay">
+    <button id="closeSelectedPlanBtn" class="close-overlay-btn">&times;</button>
+    <div class="overlay-content single-plan-content">
+      <h2 id="selectedPlanName">Plan Name</h2>
+      <div class="plan-details-large">
+        <p class="selected-price" id="selectedPlanPrice">₹0</p>
+        <p class="selected-duration" id="selectedPlanDuration">Duration</p>
+        <p class="selected-benefit" id="selectedPlanBenefit">Benefits</p>
+      </div>
+      <button id="payNowBtn" class="pay-now-btn">CLICK HERE TO PAY</button>
+      <button id="planPaidBtn" class="pay-now-btn" style="display:none; background-color: #ff006e; margin-top: 15px;">I HAVE PAYED</button>
+    </div>
+  </div>
+
+  <!-- Congratulations Overlay -->
+  <div id="congratsOverlay" class="congrats-overlay">
+    <div class="congrats-box">
+      <div class="congrats-icon">🎉</div>
+      <h2 class="congrats-title">Congratulations!</h2>
+      <p class="congrats-message">Unlimited Access Unlocked!</p>
     </div>
   </div>
 

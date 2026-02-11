@@ -282,3 +282,77 @@ settingsHeader.addEventListener("click", function() {
   settingsDropdown.classList.toggle("open");
   arrow.style.transform = settingsDropdown.classList.contains("open") ? "rotate(180deg)" : "rotate(0deg)";
 });
+
+// Selected Plan Logic
+const selectedPlanOverlay = document.getElementById("selectedPlanOverlay");
+const closeSelectedPlanBtn = document.getElementById("closeSelectedPlanBtn");
+const payNowBtn = document.getElementById("payNowBtn");
+const planPaidBtn = document.getElementById("planPaidBtn");
+let currentPaymentLink = "";
+
+function openPlanDetails(name, price, duration, benefit, link) {
+  document.getElementById("selectedPlanName").innerText = name;
+  document.getElementById("selectedPlanPrice").innerText = price;
+  document.getElementById("selectedPlanDuration").innerText = duration;
+  document.getElementById("selectedPlanBenefit").innerText = benefit;
+  currentPaymentLink = link;
+
+  // Reset buttons state
+  payNowBtn.style.display = "block";
+  planPaidBtn.style.display = "none";
+  planPaidBtn.textContent = "I HAVE PAYED";
+  planPaidBtn.disabled = false;
+
+  selectedPlanOverlay.classList.add("active");
+}
+
+closeSelectedPlanBtn.addEventListener("click", function() {
+  selectedPlanOverlay.classList.remove("active");
+});
+
+payNowBtn.addEventListener("click", function() {
+  if (currentPaymentLink) {
+    window.open(currentPaymentLink, "_blank");
+    
+    // Hide Pay button and show "I HAVE PAYED" after 20 seconds
+    payNowBtn.style.display = "none";
+    setTimeout(() => {
+      planPaidBtn.style.display = "block";
+    }, 20000);
+  }
+});
+
+planPaidBtn.addEventListener("click", function() {
+  const btn = this;
+  let timeLeft = 30;
+  btn.disabled = true;
+  btn.textContent = `Verifying... ${timeLeft}s`;
+
+  const timer = setInterval(() => {
+    timeLeft--;
+    btn.textContent = `Verifying... ${timeLeft}s`;
+    
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      if (currentUser && users[currentUser]) {
+        users[currentUser].pagesRemaining = 100000; // Grant unlimited pages
+        localStorage.setItem("users", JSON.stringify(users));
+        updateDashboard();
+        
+        // Close Plan Overlay
+        selectedPlanOverlay.classList.remove("active");
+
+        // Show Congratulations Animation
+        const congratsOverlay = document.getElementById("congratsOverlay");
+        congratsOverlay.classList.add("active");
+
+        // Hide after 4 seconds
+        setTimeout(() => {
+          congratsOverlay.classList.remove("active");
+          document.getElementById("subscriptionOverlay").classList.remove("active");
+          document.body.classList.remove("no-scroll");
+        }, 4000);
+      }
+    }
+  }, 1000);
+});

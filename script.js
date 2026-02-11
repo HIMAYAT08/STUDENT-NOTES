@@ -4,6 +4,25 @@
 let currentUser = null;
 let users = JSON.parse(localStorage.getItem("users")) || {}; // Load from LocalStorage
 
+// Check Login Status on Load
+window.addEventListener("DOMContentLoaded", () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const savedUsername = localStorage.getItem("username");
+
+  if (isLoggedIn && savedUsername && users[savedUsername]) {
+    currentUser = savedUsername;
+    showSection("dashboard");
+    document.getElementById("authWarning").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "inline-block";
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("signupBtn").style.display = "none";
+    document.getElementById("menuBtn").style.display = "flex";
+    updateDashboard();
+    renderNotes();
+    updateSidebarProfile();
+  }
+});
+
 // Utility: Show/Hide sections
 function showSection(sectionId) {
   document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
@@ -36,11 +55,18 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
 
   if (users[username] && users[username].password === password) {
     currentUser = username;
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("username", username);
+    
     document.getElementById("logoutBtn").style.display = "inline-block";
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("signupBtn").style.display = "none";
     showSection("dashboard");
     document.getElementById("authWarning").style.display = "none";
+    document.getElementById("menuBtn").style.display = "flex";
     updateDashboard();
     renderNotes();
+    updateSidebarProfile();
     loginError.style.display = "none";
   } else {
     loginError.style.display = "block";
@@ -78,9 +104,16 @@ document.getElementById("signupForm").addEventListener("submit", function(e) {
 // Logout
 document.getElementById("logoutBtn").addEventListener("click", function() {
   currentUser = null;
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("username");
+  
   document.getElementById("logoutBtn").style.display = "none";
+  document.getElementById("loginBtn").style.display = "inline-block";
+  document.getElementById("signupBtn").style.display = "inline-block";
   showSection("loginSection");
   document.getElementById("authWarning").style.display = "block";
+  document.getElementById("menuBtn").style.display = "none";
+  closeSidebar();
 });
 
 // Add Note
@@ -201,3 +234,42 @@ function payNow() {
     document.getElementById("simulatePaymentBtn").style.display = "block";
   }, 5000);
 }
+
+// Sidebar Logic
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+function openSidebar() {
+  sidebar.classList.add("active");
+  sidebarOverlay.classList.add("active");
+}
+
+function closeSidebar() {
+  sidebar.classList.remove("active");
+  sidebarOverlay.classList.remove("active");
+}
+
+menuBtn.addEventListener("click", openSidebar);
+sidebarOverlay.addEventListener("click", closeSidebar);
+
+// Update Sidebar Profile
+function updateSidebarProfile() {
+  if (currentUser) {
+    document.getElementById("sidebarProfileName").innerText = "Welcome, " + currentUser;
+    // Optional: Update profile pic initial
+    document.querySelector(".profile-pic").innerText = currentUser.charAt(0).toUpperCase();
+  }
+}
+
+// Subscription Overlay Logic
+const subscriptionOverlay = document.getElementById("subscriptionOverlay");
+
+document.getElementById("subscriptionMenuBtn").addEventListener("click", function() {
+  subscriptionOverlay.classList.add("active");
+  closeSidebar(); // Close sidebar when opening overlay
+});
+
+document.getElementById("closeSubscriptionBtn").addEventListener("click", function() {
+  subscriptionOverlay.classList.remove("active");
+});

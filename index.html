@@ -8,6 +8,29 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Sidebar Overlay -->
+  <div id="sidebarOverlay"></div>
+
+  <!-- Hamburger Menu Button -->
+  <button id="menuBtn" class="hamburger-btn" style="display: none;">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="profile-pic">H</div>
+      <h3 class="profile-name" id="sidebarProfileName">Guest</h3>
+    </div>
+    <div class="sidebar-content">
+      <ul class="sidebar-menu">
+        <li id="subscriptionMenuBtn">Subscription</li>
+      </ul>
+    </div>
+  </aside>
+
   <div id="authWarning" style="background-color: #ffeb3b; color: #333; padding: 5px; text-align: center; font-size: 12px; font-weight: bold;">⚠️ First signup and then login</div>
   <!-- Header -->
   <header>
@@ -98,6 +121,40 @@
     <p>Made for students to learn and save notes safely ✨</p>
     <p>Made by Himayat</p>
   </footer>
+
+  <!-- Full Screen Subscription Overlay -->
+  <div id="subscriptionOverlay" class="subscription-overlay">
+    <button id="closeSubscriptionBtn" class="close-overlay-btn">&times;</button>
+    <div class="overlay-content">
+      <h2>Choose Your Plan</h2>
+      <div class="plans-container">
+        <!-- Plan 1 -->
+        <div class="sub-card">
+          <div class="sub-name">Starter</div>
+          <div class="sub-price">₹50</div>
+          <div class="sub-duration">5 Days</div>
+          <div class="sub-benefit">Unlimited Papers</div>
+          <button class="select-plan-btn" onclick="window.open('https://imjo.in/fSqGSQ', '_blank')">Select Plan</button>
+        </div>
+        <!-- Plan 2 -->
+        <div class="sub-card popular">
+          <div class="sub-name">Standard</div>
+          <div class="sub-price">₹100</div>
+          <div class="sub-duration">10 Days</div>
+          <div class="sub-benefit">Unlimited Access</div>
+          <button class="select-plan-btn" onclick="window.open('https://imjo.in/d9CGVh', '_blank')">Select Plan</button>
+        </div>
+        <!-- Plan 3 -->
+        <div class="sub-card">
+          <div class="sub-name">Premium</div>
+          <div class="sub-price">₹399</div>
+          <div class="sub-duration">30 Days</div>
+          <div class="sub-benefit">Unlimited Access</div>
+          <button class="select-plan-btn" onclick="window.open('https://imjo.in/kwXpJb', '_blank')">Select Plan</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Link to JS -->
   <script src="script.js"></script>

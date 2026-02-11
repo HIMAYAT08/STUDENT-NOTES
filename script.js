@@ -3,6 +3,8 @@
 // Global state
 let currentUser = null;
 let users = JSON.parse(localStorage.getItem("users")) || {}; // Load from LocalStorage
+let currentPlanDuration = "";
+let dashboardTimerInterval = null;
 
 // Check Login Status on Load
 window.addEventListener("DOMContentLoaded", () => {
@@ -101,6 +103,7 @@ document.getElementById("signupForm").addEventListener("submit", function(e) {
 
 // Logout
 document.getElementById("sidebarLogoutBtn").addEventListener("click", function() {
+  if (dashboardTimerInterval) clearInterval(dashboardTimerInterval);
   currentUser = null;
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("username");
@@ -160,6 +163,40 @@ function updateDashboard() {
   const user = users[currentUser];
   document.getElementById("pagesUsed").textContent = user.pagesUsed;
   document.getElementById("pagesRemaining").textContent = user.pagesRemaining;
+
+  // Timer Logic
+  const timerDisplay = document.getElementById("subscriptionTimer");
+  const expiredWarning = document.getElementById("planExpiredWarning");
+
+  if (dashboardTimerInterval) clearInterval(dashboardTimerInterval);
+
+  if (user.subscriptionExpiry) {
+    const startTimer = () => {
+      const now = Date.now();
+      const timeLeft = user.subscriptionExpiry - now;
+
+      if (timeLeft <= 0) {
+        timerDisplay.style.display = "none";
+        expiredWarning.style.display = "block";
+        clearInterval(dashboardTimerInterval);
+      } else {
+        expiredWarning.style.display = "none";
+        timerDisplay.style.display = "block";
+        
+        const d = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const h = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        
+        timerDisplay.textContent = `Plan Expires In: ${d}d ${h}h ${m}m ${s}s`;
+      }
+    };
+    startTimer();
+    dashboardTimerInterval = setInterval(startTimer, 1000);
+  } else {
+    if (timerDisplay) timerDisplay.style.display = "none";
+    if (expiredWarning) expiredWarning.style.display = "none";
+  }
 
   const noteBtn = document.querySelector("#noteForm button");
   if (user.pagesRemaining <= 0) {
@@ -291,6 +328,7 @@ const planPaidBtn = document.getElementById("planPaidBtn");
 let currentPaymentLink = "";
 
 function openPlanDetails(name, price, duration, benefit, link) {
+  currentPlanDuration = duration;
   document.getElementById("selectedPlanName").innerText = name;
   document.getElementById("selectedPlanPrice").innerText = price;
   document.getElementById("selectedPlanDuration").innerText = duration;
@@ -336,6 +374,19 @@ planPaidBtn.addEventListener("click", function() {
       clearInterval(timer);
       if (currentUser && users[currentUser]) {
         users[currentUser].pagesRemaining = 100000; // Grant unlimited pages
+        
+        // Calculate Expiry
+        const now = Date.now();
+        let durationMs = 0;
+        if (currentPlanDuration === "Half Day") {
+          durationMs = 12 * 60 * 60 * 1000;
+        } else {
+          const days = parseInt(currentPlanDuration);
+          if (!isNaN(days)) durationMs = days * 24 * 60 * 60 * 1000;
+        }
+        
+        if (durationMs > 0) users[currentUser].subscriptionExpiry = now + durationMs;
+
         localStorage.setItem("users", JSON.stringify(users));
         updateDashboard();
         

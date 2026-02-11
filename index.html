@@ -83,7 +83,7 @@
   <section id="dashboard" style="display:none;">
     <h2>My Dashboard</h2>
     <p id="pagesFinishedWarning" style="color: red; font-weight: bold; display: none; text-align: center; margin-bottom: 5px;">⚠️ Warning: Your pages are finished!</p>
-    <p id="pageLimitWarning" style="color: red; font-weight: bold; display: none; text-align: center; margin-bottom: 10px;">SCROLL DOWN FOR MORE PAGES</p>
+    <p id="pageLimitWarning" style="color: red; font-weight: bold; display: none; text-align: center; margin-bottom: 10px;">SCROLL DOWN FOR MORE PAGES OR PURCHASE SUBSCRIPTION FOR UNLIMITED PAGES</p>
     <div class="stats">
       <p>Total Pages Used: <span id="pagesUsed">0</span></p>
       <p>Remaining Pages: <span id="pagesRemaining">20</span></p>
@@ -137,12 +137,20 @@
     <div class="overlay-content">
       <h2>Choose Your Plan</h2>
       <div class="plans-container">
+        <!-- Plan Mini -->
+        <div class="sub-card">
+          <div class="sub-name">Mini</div>
+          <div class="sub-price">₹20</div>
+          <div class="sub-duration">3 Days</div>
+          <div class="sub-benefit">Unlimited Access</div>
+          <button class="select-plan-btn" onclick="openPlanDetails('Mini', '₹20', '3 Days', 'Unlimited Access', 'https://imjo.in/KRzXSv')">Select Plan</button>
+        </div>
         <!-- Plan 1 -->
         <div class="sub-card">
           <div class="sub-name">Starter</div>
           <div class="sub-price">₹50</div>
           <div class="sub-duration">5 Days</div>
-          <div class="sub-benefit">Unlimited Papers</div>
+          <div class="sub-benefit">Unlimited Access</div>
           <button class="select-plan-btn" onclick="openPlanDetails('Starter', '₹50', '5 Days', 'Unlimited Papers', 'https://imjo.in/fSqGSQ')">Select Plan</button>
         </div>
         <!-- Plan 2 -->

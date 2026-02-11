@@ -27,6 +27,15 @@
     <div class="sidebar-content">
       <ul class="sidebar-menu">
         <li id="subscriptionMenuBtn">Subscription</li>
+        <li id="settingsItem" class="settings-item">
+          <div id="settingsHeader" class="settings-header">
+            <span>Settings</span>
+            <span class="arrow">▼</span>
+          </div>
+          <ul id="settingsDropdown" class="settings-dropdown">
+            <li id="sidebarLogoutBtn">Logout</li>
+          </ul>
+        </li>
       </ul>
     </div>
   </aside>
@@ -38,7 +47,6 @@
     <nav>
       <button id="loginBtn">Login</button>
       <button id="signupBtn">Signup</button>
-      <button id="logoutBtn" style="display:none;">Logout</button>
     </nav>
   </header>
 
@@ -104,7 +112,7 @@
     <!-- Payment Section -->
     <div id="paymentSection" style="display:none;">
       <h3>Unlock More Pages</h3>
-      <p>YOU HAVE USED YOUR ALL PAGES PLEASE PAY ₹10 TO UNLOCK 50 MORE PAGES.</p>
+      <p>YOU HAVE USED YOUR ALL PAGES PLEASE PAY ₹10 TO UNLOCK 20 MORE PAGES.</p>
       <div class="upi-payment">
         <p style="font-weight: bold;">PAY HEAR TO UNLOCK PAGES <br> ⬇️</p>
         <button onclick="payNow()">
@@ -113,7 +121,7 @@
         <button id="simulatePaymentBtn" style="display:none; width: 100%; margin-top: 10px;">I Have Paid</button>
       </div>
     </div>
-    <p id="paymentSuccessMsg" style="color: green; font-weight: bold; display: none; text-align: center; margin-top: 10px;">Congratulations! Payment successful! You have received 50 pages.</p>
+    <p id="paymentSuccessMsg" style="color: green; font-weight: bold; display: none; text-align: center; margin-top: 10px;">Congratulations! Payment successful! You have received 20 pages.</p>
   </section>
 
   <!-- Footer -->

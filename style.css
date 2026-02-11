@@ -18,6 +18,10 @@ body {
   min-height: 100vh;
 }
 
+body.no-scroll {
+  overflow: hidden;
+}
+
 /* Header */
 header {
   background: #6c63ff;
@@ -364,6 +368,49 @@ footer {
   color: #6c63ff;
 }
 
+/* Settings Dropdown Styles */
+.sidebar-menu li.settings-item {
+  padding: 0; /* Remove padding from container to handle inner elements */
+  display: block;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.settings-header {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.settings-dropdown {
+  list-style: none;
+  background: #f9f9f9;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.settings-dropdown.open {
+  max-height: 100px; /* Expands to show content */
+}
+
+.settings-dropdown li {
+  padding: 15px 20px 15px 40px; /* Indented text */
+  color: #ff006e; /* Red color for logout */
+  border-bottom: none;
+}
+
+.settings-dropdown li:hover {
+  background: #ffe5ec;
+  color: #d90429;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+}
+
 /* Full Screen Subscription Overlay */
 .subscription-overlay {
   position: fixed;
@@ -376,7 +423,8 @@ footer {
   z-index: 2000;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  overflow-y: auto;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -388,7 +436,7 @@ footer {
 }
 
 .close-overlay-btn {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 30px;
   background: none;
@@ -409,6 +457,8 @@ footer {
   max-width: 1000px;
   text-align: center;
   color: white;
+  margin: auto;
+  padding: 40px 0;
 }
 
 .overlay-content h2 {

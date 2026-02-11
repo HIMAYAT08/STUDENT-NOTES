@@ -13,7 +13,6 @@ window.addEventListener("DOMContentLoaded", () => {
     currentUser = savedUsername;
     showSection("dashboard");
     document.getElementById("authWarning").style.display = "none";
-    document.getElementById("logoutBtn").style.display = "inline-block";
     document.getElementById("loginBtn").style.display = "none";
     document.getElementById("signupBtn").style.display = "none";
     document.getElementById("menuBtn").style.display = "flex";
@@ -58,7 +57,6 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("username", username);
     
-    document.getElementById("logoutBtn").style.display = "inline-block";
     document.getElementById("loginBtn").style.display = "none";
     document.getElementById("signupBtn").style.display = "none";
     showSection("dashboard");
@@ -102,12 +100,11 @@ document.getElementById("signupForm").addEventListener("submit", function(e) {
 });
 
 // Logout
-document.getElementById("logoutBtn").addEventListener("click", function() {
+document.getElementById("sidebarLogoutBtn").addEventListener("click", function() {
   currentUser = null;
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("username");
   
-  document.getElementById("logoutBtn").style.display = "none";
   document.getElementById("loginBtn").style.display = "inline-block";
   document.getElementById("signupBtn").style.display = "inline-block";
   showSection("loginSection");
@@ -212,7 +209,7 @@ document.getElementById("simulatePaymentBtn").addEventListener("click", function
     if (timeLeft <= 0) {
       clearInterval(timer);
       const user = users[currentUser];
-      user.pagesRemaining += 50;
+      user.pagesRemaining += 20;
       localStorage.setItem("users", JSON.stringify(users));
       
       document.getElementById("paymentSuccessMsg").style.display = "block";
@@ -267,9 +264,21 @@ const subscriptionOverlay = document.getElementById("subscriptionOverlay");
 
 document.getElementById("subscriptionMenuBtn").addEventListener("click", function() {
   subscriptionOverlay.classList.add("active");
+  document.body.classList.add("no-scroll");
   closeSidebar(); // Close sidebar when opening overlay
 });
 
 document.getElementById("closeSubscriptionBtn").addEventListener("click", function() {
   subscriptionOverlay.classList.remove("active");
+  document.body.classList.remove("no-scroll");
+});
+
+// Settings Dropdown Logic
+const settingsHeader = document.getElementById("settingsHeader");
+const settingsDropdown = document.getElementById("settingsDropdown");
+const arrow = document.querySelector(".arrow");
+
+settingsHeader.addEventListener("click", function() {
+  settingsDropdown.classList.toggle("open");
+  arrow.style.transform = settingsDropdown.classList.contains("open") ? "rotate(180deg)" : "rotate(0deg)";
 });

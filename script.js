@@ -356,3 +356,57 @@ planPaidBtn.addEventListener("click", function() {
     }
   }, 1000);
 });
+
+// Customize Profile Logic
+const customizeProfileBtn = document.getElementById("customizeProfileBtn");
+const profileOverlay = document.getElementById("profileOverlay");
+const cancelProfileBtn = document.getElementById("cancelProfileBtn");
+const profileForm = document.getElementById("profileForm");
+const editUsername = document.getElementById("editUsername");
+const editNewPassword = document.getElementById("editNewPassword");
+const editConfirmPassword = document.getElementById("editConfirmPassword");
+
+customizeProfileBtn.addEventListener("click", function() {
+  if (!currentUser) return;
+  editUsername.value = currentUser;
+  editNewPassword.value = "";
+  editConfirmPassword.value = "";
+  profileOverlay.classList.add("active");
+  closeSidebar();
+});
+
+cancelProfileBtn.addEventListener("click", function() {
+  profileOverlay.classList.remove("active");
+});
+
+profileForm.addEventListener("submit", function(e) {
+  e.preventDefault();
+  const newUsername = editUsername.value.trim();
+  const newPassword = editNewPassword.value;
+  const confirmPassword = editConfirmPassword.value;
+
+  if (newPassword && newPassword !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  if (newUsername !== currentUser && users[newUsername]) {
+    alert("Username already taken!");
+    return;
+  }
+
+  const userData = users[currentUser];
+  if (newPassword) userData.password = newPassword;
+  
+  if (newUsername !== currentUser) {
+    users[newUsername] = userData;
+    delete users[currentUser];
+    currentUser = newUsername;
+    localStorage.setItem("username", currentUser);
+  }
+
+  localStorage.setItem("users", JSON.stringify(users));
+  updateSidebarProfile();
+  alert("Profile updated successfully!");
+  profileOverlay.classList.remove("active");
+});

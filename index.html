@@ -33,6 +33,7 @@
             <span class="arrow">▼</span>
           </div>
           <ul id="settingsDropdown" class="settings-dropdown">
+            <li id="customizeProfileBtn" style="color: #333;">Customize Your Profile</li>
             <li id="sidebarLogoutBtn">Logout</li>
           </ul>
         </li>
@@ -176,6 +177,22 @@
       </div>
       <button id="payNowBtn" class="pay-now-btn">CLICK HERE TO PAY</button>
       <button id="planPaidBtn" class="pay-now-btn" style="display:none; background-color: #ff006e; margin-top: 15px;">I HAVE PAYED</button>
+    </div>
+  </div>
+
+  <!-- Customize Profile Overlay -->
+  <div id="profileOverlay" class="subscription-overlay">
+    <div class="overlay-content single-plan-content">
+      <h2>Customize Profile</h2>
+      <form id="profileForm">
+        <input type="text" id="editUsername" placeholder="Username" required>
+        <input type="password" id="editNewPassword" placeholder="New Password (leave blank to keep current)">
+        <input type="password" id="editConfirmPassword" placeholder="Confirm Password">
+        <div class="profile-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" id="cancelProfileBtn" class="pay-now-btn" style="background: #ccc; color: #333; margin-top: 0;">Cancel</button>
+          <button type="submit" class="pay-now-btn" style="margin-top: 0;">Save Changes</button>
+        </div>
+      </form>
     </div>
   </div>
 

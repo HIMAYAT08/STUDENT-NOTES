@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Link to CSS -->
   <link rel="stylesheet" href="style.css">
+  <!-- jsPDF Library for Photo to PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <!-- Sidebar Overlay -->
@@ -27,6 +29,7 @@
     <div class="sidebar-content">
       <ul class="sidebar-menu">
         <li id="subscriptionMenuBtn">Subscription</li>
+        <li id="photoToPdfMenuBtn">Photo to PDF</li>
         <li id="settingsItem" class="settings-item">
           <div id="settingsHeader" class="settings-header">
             <span>Settings</span>
@@ -197,6 +200,23 @@
       </div>
       <button id="payNowBtn" class="pay-now-btn">CLICK HERE TO PAY</button>
       <button id="planPaidBtn" class="pay-now-btn" style="display:none; background-color: #ff006e; margin-top: 15px;">I HAVE PAYED</button>
+    </div>
+  </div>
+
+  <!-- Photo to PDF Overlay -->
+  <div id="photoToPdfOverlay" class="subscription-overlay">
+    <button id="closePhotoToPdfBtn" class="close-overlay-btn">&times;</button>
+    <div class="overlay-content single-plan-content" style="max-width: 600px;">
+      <h2>Photo to PDF</h2>
+      <div class="upload-section">
+        <input type="file" id="imageUploadInput" multiple accept="image/*" style="display: none;">
+        <label for="imageUploadInput" class="upload-box">
+          <div class="upload-icon">📁</div>
+          <p>Click to Upload Images</p>
+        </label>
+      </div>
+      <div id="imagePreviewContainer" class="image-preview-container"></div>
+      <button id="generatePdfBtn" class="pay-now-btn" style="display: none;">Download PDF</button>
     </div>
   </div>
 

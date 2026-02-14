@@ -461,3 +461,107 @@ profileForm.addEventListener("submit", function(e) {
   alert("Profile updated successfully!");
   profileOverlay.classList.remove("active");
 });
+
+// Photo to PDF Logic
+const photoToPdfMenuBtn = document.getElementById("photoToPdfMenuBtn");
+const photoToPdfOverlay = document.getElementById("photoToPdfOverlay");
+const closePhotoToPdfBtn = document.getElementById("closePhotoToPdfBtn");
+const imageUploadInput = document.getElementById("imageUploadInput");
+const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+const generatePdfBtn = document.getElementById("generatePdfBtn");
+
+let uploadedImages = [];
+
+if (photoToPdfMenuBtn) {
+  photoToPdfMenuBtn.addEventListener("click", function() {
+    photoToPdfOverlay.classList.add("active");
+    document.body.classList.add("no-scroll");
+    closeSidebar();
+  });
+}
+
+if (closePhotoToPdfBtn) {
+  closePhotoToPdfBtn.addEventListener("click", function() {
+    photoToPdfOverlay.classList.remove("active");
+    document.body.classList.remove("no-scroll");
+  });
+}
+
+if (imageUploadInput) {
+  imageUploadInput.addEventListener("change", function(e) {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    files.forEach(file => {
+      if (!file.type.startsWith("image/")) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        uploadedImages.push(event.target.result);
+        renderPreviews();
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    e.target.value = ""; // Reset input
+  });
+}
+
+function renderPreviews() {
+  imagePreviewContainer.innerHTML = "";
+  if (uploadedImages.length > 0) {
+    generatePdfBtn.style.display = "block";
+  } else {
+    generatePdfBtn.style.display = "none";
+  }
+
+  uploadedImages.forEach((imgSrc, index) => {
+    const div = document.createElement("div");
+    div.className = "preview-item";
+    div.innerHTML = `<img src="${imgSrc}">`;
+    div.title = "Click to remove";
+    div.style.cursor = "pointer";
+    div.onclick = () => {
+      uploadedImages.splice(index, 1);
+      renderPreviews();
+    };
+    imagePreviewContainer.appendChild(div);
+  });
+}
+
+if (generatePdfBtn) {
+  generatePdfBtn.addEventListener("click", function() {
+    if (uploadedImages.length === 0) return;
+    
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    
+    uploadedImages.forEach((imgData, i) => {
+      if (i > 0) doc.addPage();
+      
+      const imgProps = doc.getImageProperties(imgData);
+      const imgWidth = imgProps.width;
+      const imgHeight = imgProps.height;
+      
+      // Calculate ratio to fit A4
+      const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
+      const newWidth = imgWidth * ratio;
+      const newHeight = imgHeight * ratio;
+      
+      // Center image
+      const x = (pageWidth - newWidth) / 2;
+      const y = (pageHeight - newHeight) / 2;
+      
+      // Detect format
+      const format = imgData.match(/^data:image\/(\w+);base64,/)[1].toUpperCase();
+      const finalFormat = format === 'JPG' ? 'JPEG' : format;
+
+      doc.addImage(imgData, finalFormat, x, y, newWidth, newHeight);
+    });
+    
+    doc.save("MyNotes.pdf");
+  });
+}

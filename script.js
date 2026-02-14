@@ -399,7 +399,13 @@ planPaidBtn.addEventListener("click", function() {
           if (!isNaN(days)) durationMs = days * 24 * 60 * 60 * 1000;
         }
         
-        if (durationMs > 0) users[currentUser].subscriptionExpiry = now + durationMs;
+        if (durationMs > 0) {
+          if (users[currentUser].subscriptionExpiry && users[currentUser].subscriptionExpiry > now) {
+            users[currentUser].subscriptionExpiry += durationMs;
+          } else {
+            users[currentUser].subscriptionExpiry = now + durationMs;
+          }
+        }
 
         localStorage.setItem("users", JSON.stringify(users));
         updateDashboard();
@@ -488,30 +494,8 @@ let uploadedImages = [];
 
 if (photoToPdfMenuBtn) {
   photoToPdfMenuBtn.addEventListener("click", function() {
-    const user = users[currentUser];
-    // Initialize for existing users
-    if (typeof user.pdfConversionsUsed === 'undefined') user.pdfConversionsUsed = 0;
-    
-    const isSubscribed = user.subscriptionExpiry && user.subscriptionExpiry > Date.now();
-    const freeLimit = 3;
-    
-    // Update UI text
-    const limitSpan = document.getElementById('pdfFreeLeft');
-    const limitMsg = document.getElementById('pdfLimitWarning');
-    if (limitSpan) limitSpan.textContent = Math.max(0, freeLimit - user.pdfConversionsUsed);
-
-    if (isSubscribed || user.pdfConversionsUsed < freeLimit) {
-      if (isSubscribed && limitMsg) limitMsg.style.display = 'none';
-      else if (limitMsg) limitMsg.style.display = 'block';
-      
-      photoToPdfOverlay.classList.add("active");
-      document.body.classList.add("no-scroll");
-      closeSidebar();
-    } else {
-      alert("You have used your 3 free Photo to PDF conversions. Please buy a subscription!");
-      document.getElementById("subscriptionOverlay").classList.add("active");
-      closeSidebar();
-    }
+    alert("Coming Soon!");
+    closeSidebar();
   });
 }
 
@@ -590,15 +574,28 @@ if (generatePdfBtn) {
     generatePdfBtn.disabled = true;
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    // Initialize PDF with A4 settings
+    const doc = new jsPDF({
+      orientation: 'p',
+      unit: 'mm',
+      format: 'a4'
+    });
     
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     const pageHeight = doc.internal.pageSize.height;
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 10;
+    const margin = 15;
     const maxWidth = pageWidth - (margin * 2);
     let y = margin;
+
+    // Add Title
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("Revision Notes", pageWidth / 2, y, { align: "center" });
+    y += 10;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
     
     try {
       for (let i = 0; i < uploadedImages.length; i++) {
@@ -609,23 +606,53 @@ if (generatePdfBtn) {
         const result = await Tesseract.recognize(uploadedImages[i], 'eng');
         let text = result.data.text;
 
-        // Ensure text is in English only (removes "binary"/garbage characters)
-        text = text.replace(/[^\x20-\x7E\n\r]/g, "");
+        // Clean text: Replace smart quotes/dashes, then remove non-English/binary characters
+        text = text
+          .replace(/[\u2018\u2019]/g, "'") // Smart single quotes
+          .replace(/[\u201C\u201D]/g, '"') // Smart double quotes
+          .replace(/[\u2013\u2014]/g, "-") // Dashes
+          .replace(/[^\x20-\x7E\n\r]/g, ""); // Remove non-ASCII
 
-        // Split text to fit page width
-        const lines = doc.splitTextToSize(text, maxWidth);
-
-        // Add lines to PDF
-        for (let j = 0; j < lines.length; j++) {
-          if (y + 7 > pageHeight - margin) {
+        // Add Section Header if multiple images
+        if (uploadedImages.length > 1) {
+          if (y + 10 > pageHeight - margin) {
             doc.addPage();
             y = margin;
           }
-          doc.text(lines[j], margin, y);
-          y += 7; // Line height
+          doc.setFont("helvetica", "bold");
+          doc.text(`Section ${i + 1}`, margin, y);
+          y += 6;
+          doc.setFont("helvetica", "normal");
         }
-        y += 10; // Extra space between images
+
+        // Split text into paragraphs (double newline) to maintain structure
+        const paragraphs = text.split(/\n\s*\n/);
+
+        for (let para of paragraphs) {
+          // Merge lines within paragraph for clean flow
+          para = para.replace(/\n/g, " ").trim();
+          if (!para) continue;
+
+          const lines = doc.splitTextToSize(para, maxWidth);
+
+          if (y + (lines.length * 6) > pageHeight - margin) {
+            doc.addPage();
+            y = margin;
+          }
+          doc.text(lines, margin, y);
+          y += (lines.length * 6) + 4; // Line height + paragraph spacing
+        }
+        y += 5; // Extra space between images
       }
+
+      // Add Page Numbers
+      const pageCount = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(9);
+        doc.text(`Page ${i} of ${pageCount}`, pageWidth / 2, pageHeight - 10, { align: "center" });
+      }
+
       doc.save("Converted_Text_Notes.pdf");
     } catch (error) {
       console.error(error);

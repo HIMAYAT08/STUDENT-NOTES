@@ -93,7 +93,8 @@ document.getElementById("signupForm").addEventListener("submit", function(e) {
       password: password,
       notes: [],
       pagesUsed: 0,
-      pagesRemaining: 20
+      pagesRemaining: 20,
+      pdfConversionsUsed: 0
     };
     localStorage.setItem("users", JSON.stringify(users)); // Save to LocalStorage
     alert("Signup successful! Please login.");
@@ -171,14 +172,27 @@ function updateDashboard() {
   if (dashboardTimerInterval) clearInterval(dashboardTimerInterval);
 
   if (user.subscriptionExpiry) {
+    // Check immediately if already expired
+    if (Date.now() > user.subscriptionExpiry) {
+      delete user.subscriptionExpiry;
+      user.pagesRemaining = 10; // Reset to 10 pages on expiry
+      localStorage.setItem("users", JSON.stringify(users));
+      alert("Your subscription has expired. You have been given 10 pages.");
+      updateDashboard(); // Refresh dashboard
+      return;
+    }
+
     const startTimer = () => {
       const now = Date.now();
       const timeLeft = user.subscriptionExpiry - now;
 
       if (timeLeft <= 0) {
-        timerDisplay.style.display = "none";
-        expiredWarning.style.display = "block";
         clearInterval(dashboardTimerInterval);
+        delete user.subscriptionExpiry;
+        user.pagesRemaining = 10; // Reset to 10 pages on expiry
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("Plan Expired. You now have 10 pages.");
+        updateDashboard(); // Refresh dashboard
       } else {
         expiredWarning.style.display = "none";
         timerDisplay.style.display = "block";
@@ -474,9 +488,30 @@ let uploadedImages = [];
 
 if (photoToPdfMenuBtn) {
   photoToPdfMenuBtn.addEventListener("click", function() {
-    photoToPdfOverlay.classList.add("active");
-    document.body.classList.add("no-scroll");
-    closeSidebar();
+    const user = users[currentUser];
+    // Initialize for existing users
+    if (typeof user.pdfConversionsUsed === 'undefined') user.pdfConversionsUsed = 0;
+    
+    const isSubscribed = user.subscriptionExpiry && user.subscriptionExpiry > Date.now();
+    const freeLimit = 3;
+    
+    // Update UI text
+    const limitSpan = document.getElementById('pdfFreeLeft');
+    const limitMsg = document.getElementById('pdfLimitWarning');
+    if (limitSpan) limitSpan.textContent = Math.max(0, freeLimit - user.pdfConversionsUsed);
+
+    if (isSubscribed || user.pdfConversionsUsed < freeLimit) {
+      if (isSubscribed && limitMsg) limitMsg.style.display = 'none';
+      else if (limitMsg) limitMsg.style.display = 'block';
+      
+      photoToPdfOverlay.classList.add("active");
+      document.body.classList.add("no-scroll");
+      closeSidebar();
+    } else {
+      alert("You have used your 3 free Photo to PDF conversions. Please buy a subscription!");
+      document.getElementById("subscriptionOverlay").classList.add("active");
+      closeSidebar();
+    }
   });
 }
 
@@ -530,38 +565,71 @@ function renderPreviews() {
 }
 
 if (generatePdfBtn) {
-  generatePdfBtn.addEventListener("click", function() {
+  generatePdfBtn.addEventListener("click", async function() {
     if (uploadedImages.length === 0) return;
+
+    const user = users[currentUser];
+    const isSubscribed = user.subscriptionExpiry && user.subscriptionExpiry > Date.now();
+
+    if (!isSubscribed) {
+      if (typeof user.pdfConversionsUsed === 'undefined') user.pdfConversionsUsed = 0;
+      if (user.pdfConversionsUsed >= 3) {
+        alert("Free limit reached. Please subscribe.");
+        return;
+      }
+      user.pdfConversionsUsed++;
+      localStorage.setItem("users", JSON.stringify(users));
+      // Update UI text
+      const limitSpan = document.getElementById('pdfFreeLeft');
+      if (limitSpan) limitSpan.textContent = Math.max(0, 3 - user.pdfConversionsUsed);
+    }
     
+    // Change button state to indicate processing
+    const originalBtnText = generatePdfBtn.textContent;
+    generatePdfBtn.textContent = "Extracting Text... Please Wait";
+    generatePdfBtn.disabled = true;
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    const pageHeight = doc.internal.pageSize.height;
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 10;
+    const maxWidth = pageWidth - (margin * 2);
+    let y = margin;
     
-    uploadedImages.forEach((imgData, i) => {
-      if (i > 0) doc.addPage();
-      
-      const imgProps = doc.getImageProperties(imgData);
-      const imgWidth = imgProps.width;
-      const imgHeight = imgProps.height;
-      
-      // Calculate ratio to fit A4
-      const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
-      const newWidth = imgWidth * ratio;
-      const newHeight = imgHeight * ratio;
-      
-      // Center image
-      const x = (pageWidth - newWidth) / 2;
-      const y = (pageHeight - newHeight) / 2;
-      
-      // Detect format
-      const format = imgData.match(/^data:image\/(\w+);base64,/)[1].toUpperCase();
-      const finalFormat = format === 'JPG' ? 'JPEG' : format;
+    try {
+      for (let i = 0; i < uploadedImages.length; i++) {
+        // Update button to show progress
+        generatePdfBtn.textContent = `Processing Image ${i + 1} of ${uploadedImages.length}...`;
 
-      doc.addImage(imgData, finalFormat, x, y, newWidth, newHeight);
-    });
-    
-    doc.save("MyNotes.pdf");
+        // Perform OCR using Tesseract.js
+        const result = await Tesseract.recognize(uploadedImages[i], 'eng');
+        const text = result.data.text;
+
+        // Split text to fit page width
+        const lines = doc.splitTextToSize(text, maxWidth);
+
+        // Add lines to PDF
+        for (let j = 0; j < lines.length; j++) {
+          if (y + 7 > pageHeight - margin) {
+            doc.addPage();
+            y = margin;
+          }
+          doc.text(lines[j], margin, y);
+          y += 7; // Line height
+        }
+        y += 10; // Extra space between images
+      }
+      doc.save("Converted_Text_Notes.pdf");
+    } catch (error) {
+      console.error(error);
+      alert("Error extracting text. Please try again with clearer images.");
+    } finally {
+      generatePdfBtn.textContent = originalBtnText;
+      generatePdfBtn.disabled = false;
+    }
   });
 }

@@ -607,7 +607,10 @@ if (generatePdfBtn) {
 
         // Perform OCR using Tesseract.js
         const result = await Tesseract.recognize(uploadedImages[i], 'eng');
-        const text = result.data.text;
+        let text = result.data.text;
+
+        // Ensure text is in English only (removes "binary"/garbage characters)
+        text = text.replace(/[^\x20-\x7E\n\r]/g, "");
 
         // Split text to fit page width
         const lines = doc.splitTextToSize(text, maxWidth);
